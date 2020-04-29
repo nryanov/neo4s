@@ -1,36 +1,49 @@
 package com.nryanov.neo4s
 
 import com.nryanov.neo4s.Get.NonNullableColumnReturnedNull
-import org.neo4j.driver.{Record, Value}
+import org.neo4j.driver.Value
+import shapeless._
+import shapeless.ops.hlist.IsHCons
+import scala.reflect.runtime.universe.TypeTag
 
 import scala.util.control.NoStackTrace
 
-sealed abstract class Get[A](val get: (Record, Int) => A) {
+sealed abstract class Get[A](val get: Value => A) {
   def map[B](f: A => B): Get[B]
 
-  final def unsafeGetNonNullable(record: Record, idx: Int): A = {
-    if (record.get(idx).isNull) {
+  final def unsafeGetNonNullable(value: Value): A = {
+    if (value.isNull) {
       throw NonNullableColumnReturnedNull
     }
-    get(record, idx)
+    get(value)
   }
 
-  final def unsafeGetNullable(record: Record, idx: Int): Option[A] =
-    if (record.get(idx).isNull) {
+  final def unsafeGetNullable(value: Value): Option[A] =
+    if (value.isNull) {
       None
     } else {
-      Some(get(record, idx))
+      Some(get(value))
     }
 }
 
-object Get {
+object Get extends GetInstances {
   def apply[A](implicit get: Get[A]): get.type = get
 
   case object NonNullableColumnReturnedNull extends RuntimeException("Not nullable column returned null") with NoStackTrace
 
-  final case class Basic[A](override val get: (Record, Int) => A) extends Get[A](get) {
-    override def map[B](f: A => B): Get[B] = copy(get = (record: Record, idx: Int) => f(get(record, idx)))
+  final case class Basic[A](override val get: Value => A) extends Get[A](get) {
+    override def map[B](f: A => B): Get[B] = copy(get = (value: Value) => f(get(value)))
   }
 
   implicit def metaProjection[A](implicit meta: Meta[A]): Get[A] = meta.get
+}
+
+trait GetInstances {
+  implicit def deriveUnaryGet[A: TypeTag, L <: HList, H, T <: HList](
+    implicit gen: Generic.Aux[A, L],
+    isUnary: (H :: HNil) =:= L,
+    C: IsHCons.Aux[L, H, T],
+    get: Lazy[Get[H]]
+  ): Get[A] =
+    get.value.map[A](h => gen.from(h :: HNil))
 }
