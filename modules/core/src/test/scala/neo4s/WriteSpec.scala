@@ -1,6 +1,7 @@
 package neo4s
 
 import neo4s.Write._
+import org.neo4j.driver.{Value, Values}
 
 object WriteSpec {
   final case class A(a: Int)
