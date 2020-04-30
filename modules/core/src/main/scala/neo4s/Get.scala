@@ -1,11 +1,11 @@
-package com.nryanov.neo4s
+package neo4s
 
-import com.nryanov.neo4s.Get.NonNullableColumnReturnedNull
+import neo4s.Get.NonNullableColumnReturnedNull
 import org.neo4j.driver.Value
 import shapeless._
 import shapeless.ops.hlist.IsHCons
-import scala.reflect.runtime.universe.TypeTag
 
+import scala.reflect.runtime.universe.TypeTag
 import scala.util.control.NoStackTrace
 
 sealed abstract class Get[A](val get: Value => A) {

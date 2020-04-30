@@ -1,9 +1,7 @@
-package com.nryanov
-
 import java.net.URI
 
 import cats.effect.{Resource, Sync}
-import org.neo4j.driver.{AuthToken, AuthTokens, Config, Driver, GraphDatabase, Record, Result, Value, Values}
+import org.neo4j.driver._
 
 package object neo4s {
   trait Transactor[F[_]]

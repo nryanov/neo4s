@@ -1,7 +1,7 @@
-package com.nryanov.neo4s
+package neo4s
 
-import Put._
-import Meta._
+import neo4s.Meta._
+import neo4s.Put._
 
 object PutSpec {
   case class Foo(a: Int) extends AnyVal

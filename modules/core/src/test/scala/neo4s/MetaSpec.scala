@@ -1,8 +1,7 @@
-package com.nryanov.neo4s
-
-import org.neo4j.driver.Values
+package neo4s
 
 import cats.syntax.option._
+import org.neo4j.driver.Values
 
 class MetaSpec extends BaseSpec with MetaInstances {
   "Meta" should {

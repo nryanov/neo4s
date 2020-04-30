@@ -1,6 +1,6 @@
-package com.nryanov.neo4s
+package neo4s
 
-import Get._
+import neo4s.Get._
 
 object GetSpec {
   case class Foo(a: Int) extends AnyVal

@@ -1,4 +1,4 @@
-package com.nryanov.neo4s
+package neo4s
 
 import org.neo4j.driver.{Value, Values}
 import shapeless.labelled.FieldType

@@ -1,6 +1,6 @@
-package com.nryanov.neo4s
+package neo4s
 
-import Read._
+import neo4s.Read._
 
 object ReadSpec {
   final case class A(a: Int)

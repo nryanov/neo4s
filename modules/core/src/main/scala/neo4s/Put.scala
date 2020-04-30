@@ -1,11 +1,11 @@
-package com.nryanov.neo4s
+package neo4s
 
-import com.nryanov.neo4s.Put.NullValueInNotNullablePosition
+import neo4s.Put.NullValueInNotNullablePosition
 import org.neo4j.driver.{Value, Values}
 import shapeless.ops.hlist.IsHCons
 import shapeless.{::, Generic, HList, HNil, Lazy}
-import scala.reflect.runtime.universe.TypeTag
 
+import scala.reflect.runtime.universe.TypeTag
 import scala.util.control.NoStackTrace
 
 sealed abstract class Put[A](val put: A => Value) {

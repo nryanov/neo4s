@@ -1,6 +1,6 @@
-package com.nryanov.neo4s
+package neo4s
 
-import Write._
+import neo4s.Write._
 
 object WriteSpec {
   final case class A(a: Int)

@@ -1,6 +1,6 @@
-package com.nryanov.neo4s
+package neo4s
 
-import java.time.{LocalDate, LocalDateTime, LocalTime, OffsetDateTime, OffsetTime, ZonedDateTime}
+import java.time._
 import java.util
 
 import org.neo4j.driver.{Value, Values}
