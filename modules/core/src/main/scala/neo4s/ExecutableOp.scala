@@ -3,6 +3,7 @@ package neo4s
 import cats.effect.{Async, ContextShift, ExitCase}
 import cats.free.Free
 import cats.~>
+import org.neo4j.driver.{Query, Result}
 
 import scala.concurrent.ExecutionContext
 
@@ -15,6 +16,10 @@ object ExecutableOp {
 
   trait Visitor[F[_]] extends (ExecutableOp ~> F) {
     final def apply[A](fa: ExecutableOp[A]): F[A] = fa.visit(this)
+
+    def delayR[A](query: Query, action: Result => A): F[A]
+
+    def delayU(query: Query): F[Unit]
 
     def delay[A](a: () => A): F[A]
 
@@ -39,6 +44,10 @@ object ExecutableOp {
 
   def pure[A](a: A): ExecutableIO[A] = Free.pure[ExecutableOp, A](a)
 
+  def delayR[A](query: Query, action: Result => A): ExecutableIO[A] = Free.liftF(DelayR(query, action))
+
+  def delayU(query: Query): ExecutableIO[Unit] = Free.liftF(DelayU(query))
+
   def delay[A](a: => A): ExecutableIO[A] = Free.liftF(Delay(() => a))
 
   def handleErrorWith[A](fa: ExecutableIO[A], f: Throwable => ExecutableIO[A]): ExecutableIO[A] =
@@ -57,6 +66,14 @@ object ExecutableOp {
   val shift: ExecutableIO[Unit] = Free.liftF[ExecutableOp, Unit](Shift)
 
   def evalOn[A](ec: ExecutionContext)(fa: ExecutableIO[A]): Free[ExecutableOp, A] = Free.liftF[ExecutableOp, A](EvalOn(ec, fa))
+
+  final case class DelayR[A](query: Query, a: Result => A) extends ExecutableOp[A] {
+    def visit[F[_]](v: Visitor[F]): F[A] = v.delayR(query, a)
+  }
+
+  final case class DelayU(query: Query) extends ExecutableOp[Unit] {
+    def visit[F[_]](v: Visitor[F]): F[Unit] = v.delayU(query)
+  }
 
   final case class Delay[A](a: () => A) extends ExecutableOp[A] {
     def visit[F[_]](v: Visitor[F]): F[A] = v.delay(a)

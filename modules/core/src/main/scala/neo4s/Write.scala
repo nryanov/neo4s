@@ -16,7 +16,7 @@ final class Write[A](val unsafeSet: A => List[Value]) {
    * @param name - list of names which should be mapped with values in query
    * @return - single neo4j value
    */
-  def toValue(a: A, name: String*): Value =
+  def toValue(a: A, name: List[String]): Value =
     Values.parameters(name.zip(unsafeSet(a)).flatMap(el => List(el._1, el._2)): _*)
 }
 
