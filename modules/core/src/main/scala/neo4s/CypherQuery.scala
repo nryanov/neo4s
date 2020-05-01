@@ -1,9 +1,9 @@
 package neo4s
 
-import org.neo4j.driver.Value
+import org.neo4j.driver.{Query, Value, Values}
 
-final case class CypherQuery(query: String, names: List[String], elements: List[Element]) {
-  implicit lazy val namedElementWrite: Write[elements.type] = {
+final case class CypherQuery(queryText: String, names: List[String], elements: List[Element]) {
+  private implicit lazy val namedElementWrite: Write[elements.type] = {
     val toValues: elements.type => List[Value] = elements =>
       elements.map(value =>
         value match {
@@ -17,4 +17,13 @@ final case class CypherQuery(query: String, names: List[String], elements: List[
     new Write[elements.type](unsafeSet)
   }
 
+  def query[A: Read]: PreparedQuery[A] = {
+    val query: Query = new Query(queryText, Values.parameters(namedElementWrite.toValue(elements, names: _*)))
+    PreparedQuery[A](query)
+  }
+
+  def update: PreparedAction = {
+    val query: Query = new Query(queryText, Values.parameters(namedElementWrite.toValue(elements, names: _*)))
+    PreparedAction(query)
+  }
 }
