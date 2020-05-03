@@ -1,6 +1,6 @@
-package neo4s
+package neo4s.utils
 
-import neo4s.Get.NonNullableColumnReturnedNull
+import neo4s.utils.Get.NonNullableColumnReturnedNull
 import org.neo4j.driver.Value
 import shapeless._
 import shapeless.ops.hlist.IsHCons

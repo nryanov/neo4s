@@ -1,6 +1,7 @@
-package neo4s
+package neo4s.utils
 
-import neo4s.Get._
+import neo4s.BaseSpec
+import neo4s.utils.Get._
 
 object GetSpec {
   case class Foo(a: Int) extends AnyVal

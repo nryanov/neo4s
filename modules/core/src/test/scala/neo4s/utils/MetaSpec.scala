@@ -1,6 +1,7 @@
-package neo4s
+package neo4s.utils
 
 import cats.syntax.option._
+import neo4s.BaseSpec
 import org.neo4j.driver.Values
 
 class MetaSpec extends BaseSpec with MetaInstances {

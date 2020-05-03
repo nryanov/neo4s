@@ -1,6 +1,6 @@
-package neo4s
+package neo4s.utils
 
-import neo4s.Put.NullValueInNotNullablePosition
+import neo4s.utils.Put.NullValueInNotNullablePosition
 import org.neo4j.driver.{Value, Values}
 import shapeless.ops.hlist.IsHCons
 import shapeless.{::, Generic, HList, HNil, Lazy}

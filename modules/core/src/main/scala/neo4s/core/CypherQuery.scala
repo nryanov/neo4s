@@ -1,6 +1,7 @@
-package neo4s
+package neo4s.core
 
-import org.neo4j.driver.{Query, Value, Values}
+import neo4s.utils.{Read, Write}
+import org.neo4j.driver.{Query, Value}
 
 final case class CypherQuery(private val queryText: String, private val names: List[String], private val elements: List[Element]) {
   private implicit lazy val namedElementWrite: Write[elements.type] = {

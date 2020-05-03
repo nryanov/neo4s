@@ -1,10 +1,10 @@
-package neo4s
+package neo4s.core
 
 import java.net.URI
 
 import cats.effect.{Bracket, ExitCase, Resource, Sync}
-import neo4s.ExecutableOp.ExecutableIO
-import org.neo4j.driver.{AuthToken, AuthTokens, Config, Driver, GraphDatabase, Session}
+import neo4s.core.ExecutableOp.ExecutableIO
+import org.neo4j.driver._
 
 final class Neo4jTransactor[F[_]](driver: Driver)(implicit F: Sync[F]) {
 
@@ -31,9 +31,9 @@ final class Neo4jTransactor[F[_]](driver: Driver)(implicit F: Sync[F]) {
 }
 
 object Neo4jTransactor {
-  def create[F[_]: Sync](uri: String): Resource[F, Neo4jTransactor[F]] = create(uri, Config.defaultConfig())
+  def create[F[_]: Sync](uri: String): Resource[F, Neo4jTransactor[F]] = create(uri, Config.builder().withLogging(Logging.slf4j()).build())
 
-  def create[F[_]: Sync](uri: URI): Resource[F, Neo4jTransactor[F]] = create(uri, Config.defaultConfig())
+  def create[F[_]: Sync](uri: URI): Resource[F, Neo4jTransactor[F]] = create(uri, Config.builder().withLogging(Logging.slf4j()).build())
 
   def create[F[_]: Sync](uri: String, config: Config): Resource[F, Neo4jTransactor[F]] = create(uri, config, AuthTokens.none())
 
@@ -46,7 +46,7 @@ object Neo4jTransactor {
 
   private def create0[F[_]: Sync](
     uri: URI,
-    config: Config = Config.defaultConfig(),
+    config: Config = Config.builder().withLogging(Logging.slf4j()).build(),
     authToken: AuthToken = AuthTokens.none()
   ): Resource[F, Neo4jTransactor[F]] = {
     def acquire: F[Driver] = Sync[F].delay(GraphDatabase.driver(uri, authToken, config))

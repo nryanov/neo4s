@@ -1,6 +1,6 @@
-package neo4s
+package neo4s.core
 
-import neo4s.ExecutableOp.ExecutableIO
+import neo4s.core.ExecutableOp.ExecutableIO
 import org.neo4j.driver.summary.SummaryCounters
 import org.neo4j.driver.{Query, Result}
 

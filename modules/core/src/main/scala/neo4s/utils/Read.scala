@@ -1,4 +1,4 @@
-package neo4s
+package neo4s.utils
 
 import org.neo4j.driver.Record
 import shapeless._

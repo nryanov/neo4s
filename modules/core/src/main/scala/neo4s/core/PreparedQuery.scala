@@ -1,7 +1,8 @@
-package neo4s
+package neo4s.core
 
 import cats.data.NonEmptyList
-import neo4s.ExecutableOp.ExecutableIO
+import neo4s.core.ExecutableOp.ExecutableIO
+import neo4s.utils.Read
 import org.neo4j.driver.{Query, Result}
 
 import scala.jdk.CollectionConverters._
@@ -22,7 +23,9 @@ final class PreparedQuery[A](query: Query)(implicit read: Read[A]) {
   }
 
   def list: ExecutableIO[List[A]] = {
-    val action: Result => List[A] = result => result.list().asScala.map(read.unsafeGet(_, START_INDEX)).toList
+    val action: Result => List[A] = result => {
+      result.list().asScala.map(record => read.unsafeGet(record, START_INDEX)).toList
+    }
 
     ExecutableOp.delayR(query, action)
   }

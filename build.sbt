@@ -7,18 +7,11 @@ lazy val shapelessVersion = "2.3.3"
 lazy val neo4jDriverVersion = "4.0.0"
 lazy val kindProjectorVersion = "0.11.0"
 lazy val scalaReflectVersion = "2.13.2"
+lazy val slf4jVersion = "1.7.30"
 lazy val scalaTestVersion = "3.1.1"
 
 lazy val commonSettings = Seq(
   libraryDependencies ++= Seq(
-    "org.typelevel" %% "cats-core" % catsVersion,
-    "org.typelevel" %% "cats-effect" % catsEffectVersion,
-    "org.typelevel" %% "cats-free" % catsVersion,
-    "com.chuusai" %% "shapeless" % shapelessVersion,
-    "co.fs2" %% "fs2-core" % fs2Version,
-    "co.fs2" %% "fs2-io" % fs2Version,
-    "co.fs2" %% "fs2-reactive-streams" % fs2Version,
-    "org.scala-lang" % "scala-reflect" % scalaReflectVersion,
     "org.scalatest" %% "scalatest" % scalaTestVersion % Test
   ),
   scalacOptions := Seq(
@@ -42,7 +35,9 @@ lazy val neo4s = project
   .in(file("."))
   .settings(commonSettings)
   .aggregate(
-    core
+    core,
+    circe,
+    enumeratum
   )
 
 lazy val core = project
@@ -51,6 +46,46 @@ lazy val core = project
   .settings(
     name := "neo4s-core",
     libraryDependencies ++= Seq(
+      "org.typelevel" %% "cats-core" % catsVersion,
+      "org.typelevel" %% "cats-effect" % catsEffectVersion,
+      "org.typelevel" %% "cats-free" % catsVersion,
+      "com.chuusai" %% "shapeless" % shapelessVersion,
+      "co.fs2" %% "fs2-core" % fs2Version,
+      "co.fs2" %% "fs2-io" % fs2Version,
+      "co.fs2" %% "fs2-reactive-streams" % fs2Version,
+      "org.scala-lang" % "scala-reflect" % scalaReflectVersion,
+      "org.slf4j" % "slf4j-api" % slf4jVersion,
       "org.neo4j.driver" % "neo4j-java-driver" % neo4jDriverVersion
     )
+  )
+
+lazy val examples = project
+  .in(file("modules/examples"))
+  .dependsOn(core)
+  .settings(commonSettings)
+  .settings(
+    name := "neo4s-examples",
+    libraryDependencies ++= Seq(
+      "ch.qos.logback" % "logback-classic" % "1.2.3"
+    )
+  )
+
+lazy val circe = project
+  .in(file("modules/circe"))
+  .dependsOn(core)
+  .settings(commonSettings)
+  .settings(
+    name := "neo4s-circe",
+    libraryDependencies ++= Seq(
+      )
+  )
+
+lazy val enumeratum = project
+  .in(file("modules/enumeratum"))
+  .dependsOn(core)
+  .settings(commonSettings)
+  .settings(
+    name := "neo4s-enumeratum",
+    libraryDependencies ++= Seq(
+      )
   )

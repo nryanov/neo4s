@@ -1,6 +1,7 @@
-package neo4s
+package neo4s.utils
 
-import neo4s.Read._
+import neo4s.BaseSpec
+import neo4s.utils.Read._
 
 object ReadSpec {
   final case class A(a: Int)

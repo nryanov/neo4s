@@ -1,4 +1,6 @@
-package neo4s
+package neo4s.core
+
+import neo4s.utils.Put
 
 sealed trait Element
 

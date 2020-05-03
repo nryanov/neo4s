@@ -1,11 +1,10 @@
-package neo4s
+package neo4s.core
 
-import cats.~>
 import cats.data.Kleisli
 import cats.effect.Sync
 import cats.syntax.functor._
-import neo4s.ExecutableOp._
-import neo4s.ExecutableOp.ExecutableIO
+import cats.~>
+import neo4s.core.ExecutableOp.{DelayR, ExecutableIO}
 import org.neo4j.driver.Transaction
 
 object Interpreter {

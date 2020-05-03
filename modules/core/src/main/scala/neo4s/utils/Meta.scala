@@ -1,7 +1,8 @@
-package neo4s
+package neo4s.utils
 
 import java.time._
 import java.util
+import java.util.UUID
 
 import org.neo4j.driver.{Value, Values}
 
@@ -38,6 +39,14 @@ trait MetaInstances {
   implicit val stringMetaInstance: Meta[String] = Meta.basic[String](_.asString(), string => Values.value(string))
 
   implicit val booleanMetaInstance: Meta[Boolean] = Meta.basic[Boolean](_.asBoolean(), bool => Values.value(bool))
+
+  implicit val uuidMetaInstance: Meta[UUID] = Meta[String].imap(str => UUID.fromString(str))(uuid => uuid.toString)
+
+  // neo4j driver does not support BigInt values.
+  implicit val bigIntMetaInstance: Meta[BigInt] = Meta[String].imap(str => BigInt.apply(str))(value => value.toString())
+
+  // neo4j driver does not support BigDecimal values.
+  implicit val bigDecimalMetaInstance: Meta[BigDecimal] = Meta[String].imap(str => BigDecimal.apply(str))(value => value.toString())
 
   implicit val offsetTimeMetaInstance: Meta[OffsetTime] = Meta.basic[OffsetTime](_.asOffsetTime(), offsetTime => Values.value(offsetTime))
 

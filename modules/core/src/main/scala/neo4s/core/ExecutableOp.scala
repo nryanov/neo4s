@@ -1,4 +1,4 @@
-package neo4s
+package neo4s.core
 
 import cats.free.Free
 import org.neo4j.driver.{Query, Result}
