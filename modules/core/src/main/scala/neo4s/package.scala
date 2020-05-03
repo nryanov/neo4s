@@ -1,3 +1,6 @@
+import cats.effect.Sync
+import neo4s.ExecutableOp.ExecutableIO
+
 import scala.collection.mutable
 
 package object neo4s {
@@ -24,5 +27,9 @@ package object neo4s {
 
       CypherQuery(query.toString(), names.toList, elements.toList)
     }
+  }
+
+  implicit class ExecutableSyntax[A](val executableIO: ExecutableIO[A]) extends AnyVal {
+    def transact[F[_]: Sync](neo4jTransactor: Neo4jTransactor[F]): F[A] = neo4jTransactor.transact(executableIO)
   }
 }
