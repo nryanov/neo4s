@@ -3,8 +3,12 @@ package neo4s.core
 import neo4s.utils.{Read, Write}
 import org.neo4j.driver.{Query, Value}
 
-final case class CypherQuery(private val queryText: String, private val names: List[String], private val elements: List[Element]) {
-  private implicit lazy val namedElementWrite: Write[elements.type] = {
+final case class CypherQuery(
+  private[core] val queryText: String,
+  private[core] val names: List[String],
+  private[core] val elements: List[Element]
+) {
+  private[core] implicit lazy val namedElementWrite: Write[elements.type] = {
     val toValues: elements.type => List[Value] = elements =>
       elements.map(value =>
         value match {

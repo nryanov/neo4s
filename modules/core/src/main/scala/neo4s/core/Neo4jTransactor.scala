@@ -9,7 +9,7 @@ import org.neo4j.driver._
 final class Neo4jTransactor[F[_]](driver: Driver)(implicit F: Sync[F]) {
 
   def transact[A](executableIO: ExecutableIO[A]): F[A] = session().use { session =>
-    Bracket[F, Throwable].bracketCase(F.delay(session.beginTransaction())) { tx =>
+    Bracket[F, Throwable].bracketCase[Transaction, A](F.delay(session.beginTransaction())) { tx =>
       Interpreter.compile(executableIO).run(tx)
     } {
       case (tx, code) =>

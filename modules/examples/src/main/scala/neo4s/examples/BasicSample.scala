@@ -13,13 +13,13 @@ object BasicSample extends IOApp {
 
     val query = for {
       _ <- cypher"create (n:Person {name: $name})".update.run
-      name <- cypher"match (n:Person {name: $name}) return n.name".query[String].list
+      name <- cypher"match (n:Person {name: $name}) return n.name".query[String].unique
     } yield name
 
     query
       .transact(transactor)
-      .flatTap(list => IO.delay(s"List size: ${list.length}"))
-      .flatTap(returnedName => IO.delay(s"Returned name: $returnedName"))
+      .flatTap(list => IO.delay(println(s"List size: ${list.length}")))
+      .flatTap(returnedName => IO.delay(println(s"Returned name: $returnedName")))
       .map(_ => ExitCode.Success)
       .handleErrorWith(error => IO.delay(println(s"Error: ${error.getLocalizedMessage}")).map(_ => ExitCode.Error))
   }

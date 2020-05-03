@@ -9,6 +9,7 @@ lazy val kindProjectorVersion = "0.11.0"
 lazy val scalaReflectVersion = "2.13.2"
 lazy val slf4jVersion = "1.7.30"
 lazy val scalaTestVersion = "3.1.1"
+lazy val testContainersVersion = "0.36.0"
 
 lazy val commonSettings = Seq(
   libraryDependencies ++= Seq(
@@ -55,7 +56,9 @@ lazy val core = project
       "co.fs2" %% "fs2-reactive-streams" % fs2Version,
       "org.scala-lang" % "scala-reflect" % scalaReflectVersion,
       "org.slf4j" % "slf4j-api" % slf4jVersion,
-      "org.neo4j.driver" % "neo4j-java-driver" % neo4jDriverVersion
+      "org.neo4j.driver" % "neo4j-java-driver" % neo4jDriverVersion,
+      "com.dimafeng" %% "testcontainers-scala" % testContainersVersion % Test,
+      "com.dimafeng" %% "testcontainers-scala-neo4j" % testContainersVersion % Test
     )
   )
 
