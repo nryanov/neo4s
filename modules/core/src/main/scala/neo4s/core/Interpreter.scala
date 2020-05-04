@@ -4,7 +4,7 @@ import cats.data.Kleisli
 import cats.effect.Sync
 import cats.syntax.functor._
 import cats.~>
-import neo4s.core.ExecutableOp.{DelayR, ExecutableIO}
+import neo4s.core.ExecutableOp.ExecutableIO
 import org.neo4j.driver.Transaction
 
 object Interpreter {
@@ -17,7 +17,10 @@ object Interpreter {
 
   private def interpreter[F[_]: Sync](transaction: Transaction): ExecutableOp ~> F = new (ExecutableOp ~> F) {
     override def apply[A](fa: ExecutableOp[A]): F[A] = fa match {
-      case DelayR(query, action) => Sync[F].delay(transaction.run(query)).map(action)
+      case ExecutableOp.DelayR(query, action)  => Sync[F].delay(transaction.run(query)).map(action)
+      case ExecutableOp.Delay(thunk)           => Sync[F].delay(thunk())
+      case ExecutableOp.RaiseError(e)          => Sync[F].raiseError(e)
+      case ExecutableOp.HandleErrorWith(fa, f) => Sync[F].handleErrorWith(compile(fa).run(transaction))(e => compile(f(e)).run(transaction))
     }
   }
 }

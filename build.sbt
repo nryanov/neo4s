@@ -36,9 +36,7 @@ lazy val neo4s = project
   .in(file("."))
   .settings(commonSettings)
   .aggregate(
-    core,
-    circe,
-    enumeratum
+    core
   )
 
 lazy val core = project
@@ -71,24 +69,4 @@ lazy val examples = project
     libraryDependencies ++= Seq(
       "ch.qos.logback" % "logback-classic" % "1.2.3"
     )
-  )
-
-lazy val circe = project
-  .in(file("modules/circe"))
-  .dependsOn(core)
-  .settings(commonSettings)
-  .settings(
-    name := "neo4s-circe",
-    libraryDependencies ++= Seq(
-      )
-  )
-
-lazy val enumeratum = project
-  .in(file("modules/enumeratum"))
-  .dependsOn(core)
-  .settings(commonSettings)
-  .settings(
-    name := "neo4s-enumeratum",
-    libraryDependencies ++= Seq(
-      )
   )
