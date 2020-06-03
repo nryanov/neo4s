@@ -8,6 +8,9 @@ import shapeless.ops.hlist.IsHCons
 import scala.reflect.runtime.universe.TypeTag
 import scala.util.control.NoStackTrace
 
+/**
+ * adapted from: https://github.com/tpolecat/doobie/blob/master/modules/core/src/main/scala/doobie/util/get.scala
+ */
 sealed abstract class Get[A](val get: Value => A) {
   def map[B](f: A => B): Get[B]
 

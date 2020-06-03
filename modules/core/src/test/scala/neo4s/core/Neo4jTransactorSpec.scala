@@ -101,5 +101,49 @@ class Neo4jTransactorSpec extends IOSpec with TestContainerForAll {
         assert(a.isRight)
       }
     }
+
+    "manual commit" in runF {
+      val query1 = for {
+        summary <- cypher"create (n:Entity {id: 5})".update.run
+        _ <- ExecutableOp.commit()
+      } yield {
+        assertResult(1)(summary.nodesCreated())
+      }
+
+      val query2 = for {
+        id <- cypher"match (n:Entity) where n.id = 5 return n.id".query[Int].option
+      } yield {
+        assert(id.isDefined)
+      }
+
+      for {
+        a <- transactor.transact(query1).attempt
+        _ <- transactor.transact(query2)
+      } yield {
+        assert(a.isRight)
+      }
+    }
+
+    "manual rollback" in runF {
+      val query1 = for {
+        summary <- cypher"create (n:Entity {id: 6})".update.run
+        _ <- ExecutableOp.rollback()
+      } yield {
+        assertResult(1)(summary.nodesCreated())
+      }
+
+      val query2 = for {
+        id <- cypher"match (n:Entity) where n.id = 6 return n.id".query[Int].option
+      } yield {
+        assert(id.isEmpty)
+      }
+
+      for {
+        a <- transactor.transact(query1).attempt
+        _ <- transactor.transact(query2)
+      } yield {
+        assert(a.isRight)
+      }
+    }
   }
 }

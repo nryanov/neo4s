@@ -4,6 +4,9 @@ import org.neo4j.driver.{Value, Values}
 import shapeless.labelled.FieldType
 import shapeless.{::, <:!<, Generic, HList, HNil, Lazy}
 
+/**
+ * adapted from: https://github.com/tpolecat/doobie/blob/master/modules/core/src/main/scala/doobie/util/write.scala
+ */
 final class Write[A](val unsafeSet: A => List[Value]) {
 
   /**

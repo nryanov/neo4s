@@ -1,20 +1,5 @@
-# neo4s
+package neo4s.examples
 
-Neo4s - scala wrapper for [Neo4j](https://github.com/neo4j/neo4j).
-The core ideas were taken from [doobie](https://github.com/tpolecat/doobie). 
-
-## Build
-```shell script
-sbt clean compile
-```
-
-## Test
-```shell script
-sbt test
-```
-
-## Usage example
-```scala
 import neo4s._
 import neo4s.implicits._
 import cats.effect.{ExitCode, IO, IOApp}
@@ -44,4 +29,3 @@ object BasicSample extends IOApp {
       .handleErrorWith(error => IO.delay(println(s"Error: ${error.getLocalizedMessage}")).map(_ => ExitCode.Error))
   }
 }
-```

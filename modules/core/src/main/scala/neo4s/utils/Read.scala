@@ -6,6 +6,9 @@ import shapeless.labelled.{FieldType, field}
 
 final class Read[A](val unsafeGet: (Record, Int) => A)
 
+/**
+ * adapted from: https://github.com/tpolecat/doobie/blob/master/modules/core/src/main/scala/doobie/util/read.scala
+ */
 object Read extends ReadLowerPriority {
   def apply[A](implicit read: Read[A]): read.type = read
 

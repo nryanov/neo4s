@@ -8,6 +8,9 @@ import shapeless.{::, Generic, HList, HNil, Lazy}
 import scala.reflect.runtime.universe.TypeTag
 import scala.util.control.NoStackTrace
 
+/**
+ * adapted from: https://github.com/tpolecat/doobie/blob/master/modules/core/src/main/scala/doobie/util/put.scala
+ */
 sealed abstract class Put[A](val put: A => Value) {
   def contramap[B](f: B => A): Put[B]
 

@@ -14,9 +14,9 @@ final class Neo4jTransactor[F[_]](driver: Driver)(implicit F: Sync[F]) {
     } {
       case (tx, code) =>
         code match {
-          case ExitCase.Completed => F.delay(tx.commit())
-          case ExitCase.Error(_)  => F.delay(tx.rollback())
-          case ExitCase.Canceled  => F.delay(tx.rollback())
+          case ExitCase.Completed => F.whenA(tx.isOpen)(F.delay(tx.commit()))
+          case ExitCase.Error(_)  => F.whenA(tx.isOpen)(F.delay(tx.rollback()))
+          case ExitCase.Canceled  => F.whenA(tx.isOpen)(F.delay(tx.rollback()))
         }
     }
   }

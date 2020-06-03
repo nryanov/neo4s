@@ -1,13 +1,14 @@
 name := "neo4s"
 
 lazy val catsVersion = "2.1.1"
-lazy val catsEffectVersion = "2.1.2"
+lazy val catsEffectVersion = "2.1.1"
 lazy val fs2Version = "2.3.0"
 lazy val shapelessVersion = "2.3.3"
 lazy val neo4jDriverVersion = "4.0.0"
 lazy val kindProjectorVersion = "0.11.0"
 lazy val scalaReflectVersion = "2.13.2"
 lazy val slf4jVersion = "1.7.30"
+lazy val logbackVersion = "1.2.3"
 lazy val scalaTestVersion = "3.1.1"
 lazy val testContainersVersion = "0.36.0"
 
@@ -56,17 +57,18 @@ lazy val core = project
       "org.slf4j" % "slf4j-api" % slf4jVersion,
       "org.neo4j.driver" % "neo4j-java-driver" % neo4jDriverVersion,
       "com.dimafeng" %% "testcontainers-scala" % testContainersVersion % Test,
-      "com.dimafeng" %% "testcontainers-scala-neo4j" % testContainersVersion % Test
+      "com.dimafeng" %% "testcontainers-scala-neo4j" % testContainersVersion % Test,
+      "ch.qos.logback" % "logback-classic" % logbackVersion % Test
     )
   )
 
 lazy val examples = project
-  .in(file("modules/examples"))
+  .in(file("examples"))
   .dependsOn(core)
   .settings(commonSettings)
   .settings(
-    name := "neo4s-examples",
+    name := "examples",
     libraryDependencies ++= Seq(
-      "ch.qos.logback" % "logback-classic" % "1.2.3"
+      "ch.qos.logback" % "logback-classic" % logbackVersion
     )
   )
