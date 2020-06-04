@@ -6,7 +6,7 @@ import java.util.UUID
 
 import org.neo4j.driver.{Value, Values}
 
-import scala.jdk.CollectionConverters._
+import neo4s.utils.CollectionCompat._
 import scala.reflect.ClassTag
 
 final case class Meta[A](get: Get[A], put: Put[A]) {
@@ -66,16 +66,16 @@ trait MetaInstances {
   implicit val byteArrayMetaInstance: Meta[Array[Byte]] = Meta.basic[Array[Byte]](_.asByteArray(), byteArray => Values.value(byteArray))
 
   implicit def listMetaInstance[A: Get: Put: ClassTag]: Meta[List[A]] =
-    Meta.basic[List[A]](value => value.asList[A](Get[A].get(_)).asScala.toList, list => Values.value(list.map(Put[A].put): _*))
+    Meta.basic[List[A]](value => value.asList[A](Get[A].get(_)), list => Values.value(list.map(Put[A].put): _*))
 
   implicit def arrayMetaInstance[A: Get: Put: ClassTag]: Meta[Array[A]] = Meta[List[A]].imap(_.toArray)(_.toList)
 
   implicit def mapMetaInstance[A: Get: Put: ClassTag]: Meta[Map[String, A]] =
     Meta.basic[Map[String, A]](
-      value => value.asMap[A](Get[A].get(_)).asScala.toMap,
+      value => value.asMap[A](Get[A].get(_)),
       map => {
-        val mapOfValues: Map[String, Value] = map.view.mapValues(Put[A].put).toMap
-        val javaMap: util.Map[String, Value] = mapOfValues.asJava
+        val mapOfValues: Map[String, Value] = mapValues(map, Put[A].put)
+        val javaMap: util.Map[String, Value] = mapOfValues
         Values.value(javaMap)
       }
     )

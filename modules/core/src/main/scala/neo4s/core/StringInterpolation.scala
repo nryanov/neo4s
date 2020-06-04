@@ -20,8 +20,8 @@ object StringInterpolation {
         query.append(partsIterator.next())
         argNumber += 1
 
-        elements.addOne(argsIterator.next())
-        names.addOne(argName)
+        elements.append(argsIterator.next())
+        names.append(argName)
       }
 
       CypherQuery(query.toString(), names.toList, elements.toList)
