@@ -80,7 +80,6 @@ def compilerOptions(scalaVersion: String) = Seq(
   "-unchecked",
   "-Ywarn-dead-code",
   "-Ywarn-numeric-widen",
-  "-Xfatal-warnings",
   "-Xlog-implicits",
   "-Xlint",
   "-language:existentials",
