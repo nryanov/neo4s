@@ -7,7 +7,7 @@ import cats.syntax.option._
 import neo4s.BaseSpec
 import org.neo4j.driver.{Value, Values}
 
-import scala.jdk.CollectionConverters._
+import neo4s.utils.CollectionCompat._
 
 class MetaSpec extends BaseSpec with MetaInstances {
   def assertions[A](
@@ -233,10 +233,10 @@ class MetaSpec extends BaseSpec with MetaInstances {
       val toOptionNone = meta.put.unsafeToValueNullable(None)
       val fromOptionNone = meta.get.unsafeGetNullable(toOptionNone)
 
-      assertResult(Values.value(value.asJavaCollection))(to)
+      assertResult(Values.value(scalaListToJavaList(value)))(to)
       assertResult(value)(from)
 
-      assertResult(Values.value(value.asJavaCollection))(toOption)
+      assertResult(Values.value(scalaListToJavaList(value)))(toOption)
       assertResult(value.some)(fromOption)
 
       assertResult(Values.NULL)(toOptionNone)
@@ -260,10 +260,10 @@ class MetaSpec extends BaseSpec with MetaInstances {
       val toOptionNone = meta.put.unsafeToValueNullable(None)
       val fromOptionNone = meta.get.unsafeGetNullable(toOptionNone)
 
-      assertResult(Values.value(value.asJava))(to)
+      assertResult(Values.value(scalaMapToJavaMap(value)))(to)
       assertResult(value)(from)
 
-      assertResult(Values.value(value.asJava))(toOption)
+      assertResult(Values.value(scalaMapToJavaMap(value)))(toOption)
       assertResult(value.some)(fromOption)
 
       assertResult(Values.NULL)(toOptionNone)
