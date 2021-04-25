@@ -11,13 +11,12 @@ final class Neo4jTransactor[F[_]](driver: Driver)(implicit F: Sync[F]) {
   def transact[A](executableIO: ExecutableIO[A]): F[A] = session().use { session =>
     Bracket[F, Throwable].bracketCase[Transaction, A](F.delay(session.beginTransaction())) { tx =>
       Interpreter.compile(executableIO).run(tx)
-    } {
-      case (tx, code) =>
-        code match {
-          case ExitCase.Completed => F.whenA(tx.isOpen)(F.delay(tx.commit()))
-          case ExitCase.Error(_)  => F.whenA(tx.isOpen)(F.delay(tx.rollback()))
-          case ExitCase.Canceled  => F.whenA(tx.isOpen)(F.delay(tx.rollback()))
-        }
+    } { case (tx, code) =>
+      code match {
+        case ExitCase.Completed => F.whenA(tx.isOpen)(F.delay(tx.commit()))
+        case ExitCase.Error(_)  => F.whenA(tx.isOpen)(F.delay(tx.rollback()))
+        case ExitCase.Canceled  => F.whenA(tx.isOpen)(F.delay(tx.rollback()))
+      }
     }
   }
 
