@@ -2,7 +2,7 @@ import ReleaseTransformations._
 
 lazy val catsVersion = "2.1.1"
 lazy val catsEffectVersion = "2.1.1"
-lazy val fs2Version = "2.3.0"
+lazy val fs2Version = "2.5.5"
 lazy val shapelessVersion = "2.3.3"
 lazy val neo4jDriverVersion = "4.0.0"
 lazy val kindProjectorVersion = "0.11.0"
