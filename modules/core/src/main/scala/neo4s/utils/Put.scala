@@ -38,8 +38,8 @@ object Put extends PutInstances {
 }
 
 trait PutInstances {
-  implicit def deriveUnaryPut[A: TypeTag, L <: HList, H, T <: HList](
-    implicit gen: Generic.Aux[A, L],
+  implicit def deriveUnaryPut[A: TypeTag, L <: HList, H, T <: HList](implicit
+    gen: Generic.Aux[A, L],
     isUnary: (H :: HNil) =:= L,
     C: IsHCons.Aux[L, H, T],
     get: Lazy[Put[H]]

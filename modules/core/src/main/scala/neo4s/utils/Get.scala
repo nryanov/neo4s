@@ -42,8 +42,8 @@ object Get extends GetInstances {
 }
 
 trait GetInstances {
-  implicit def deriveUnaryGet[A: TypeTag, L <: HList, H, T <: HList](
-    implicit gen: Generic.Aux[A, L],
+  implicit def deriveUnaryGet[A: TypeTag, L <: HList, H, T <: HList](implicit
+    gen: Generic.Aux[A, L],
     isUnary: (H :: HNil) =:= L,
     C: IsHCons.Aux[L, H, T],
     get: Lazy[Get[H]]
