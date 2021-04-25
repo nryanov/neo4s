@@ -8,8 +8,8 @@ lazy val neo4jDriverVersion = "4.0.0"
 lazy val kindProjectorVersion = "0.11.0"
 lazy val slf4jVersion = "1.7.30"
 lazy val logbackVersion = "1.2.3"
-lazy val scalaTestVersion = "3.1.4"
-lazy val testContainersVersion = "0.36.0"
+lazy val scalaTestVersion = "3.1.1"
+lazy val testContainersVersion = "0.39.3"
 
 lazy val buildSettings = Seq(
   organization := "com.nryanov.neo4s",
