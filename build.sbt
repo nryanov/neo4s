@@ -1,6 +1,6 @@
 lazy val catsVersion = "2.6.0"
 lazy val catsEffectVersion = "2.5.0"
-lazy val neo4jDriverVersion = "4.0.3"
+lazy val neo4jDriverVersion = "4.2.5"
 lazy val shapelessVersion = "2.3.4"
 lazy val fs2Version = "2.5.5"
 lazy val kindProjectorVersion = "0.11.3"
