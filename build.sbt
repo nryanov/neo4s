@@ -1,5 +1,3 @@
-import ReleaseTransformations._
-
 lazy val catsVersion = "2.6.0"
 lazy val catsEffectVersion = "2.5.0"
 lazy val neo4jDriverVersion = "4.0.3"
@@ -11,62 +9,32 @@ lazy val logbackVersion = "1.2.3"
 lazy val scalaTestVersion = "3.1.4"
 lazy val testContainersVersion = "0.39.3"
 
+val scala2_12 = "2.12.13"
+val scala2_13 = "2.13.5"
+
+val compileAndTest = "compile->compile;test->test"
+
 lazy val buildSettings = Seq(
+  sonatypeProfileName := "com.nryanov",
   organization := "com.nryanov.neo4s",
-  scalaVersion := "2.13.2",
-  crossScalaVersions := Seq("2.12.10", "2.13.2")
+  homepage := Some(url("https://github.com/nryanov/neo4s")),
+  licenses := List("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
+  developers := List(
+    Developer(
+      "nryanov",
+      "Nikita Ryanov",
+      "ryanov.nikita@gmail.com",
+      url("https://nryanov.com")
+    )
+  ),
+  scalaVersion := scala2_13,
+  crossScalaVersions := Seq(scala2_12, scala2_13)
 )
 
 lazy val noPublish = Seq(
   publish := {},
   publishLocal := {},
   publishArtifact := false
-)
-
-lazy val publishSettings = Seq(
-  publishMavenStyle := true,
-  publishArtifact := true,
-  publishTo := {
-    val nexus = "https://oss.sonatype.org/"
-    if (isSnapshot.value)
-      Some("snapshots".at(nexus + "content/repositories/snapshots"))
-    else
-      Some("releases".at(nexus + "service/local/staging/deploy/maven2"))
-  },
-  publishArtifact in Test := false,
-  releasePublishArtifactsAction := PgpKeys.publishSigned.value,
-  releaseIgnoreUntrackedFiles := true,
-  licenses := Seq("Apache 2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0")),
-  homepage := Some(url("https://github.com/nryanov/neo4s")),
-  autoAPIMappings := true,
-  apiURL := Some(url("https://github.com/nryanov/neo4s")),
-  scmInfo := Some(
-    ScmInfo(
-      url("https://github.com/nryanov/neo4s"),
-      "scm:git:git@github.com:nryanov/neo4s.git"
-    )
-  ),
-  releaseVersionBump := sbtrelease.Version.Bump.Minor,
-  releaseCrossBuild := true,
-  releaseProcess := {
-    Seq[ReleaseStep](
-      checkSnapshotDependencies,
-      inquireVersions,
-      runClean,
-      runTest,
-      setReleaseVersion,
-      releaseStepCommandAndRemaining("+publishSigned"),
-      releaseStepCommand("sonatypeBundleRelease"),
-      setNextVersion
-    )
-  },
-  pomExtra :=
-    <developers>
-      <developer>
-        <id>nryanov</id>
-        <name>Nikita Ryanov</name>
-      </developer>
-    </developers>
 )
 
 def compilerOptions(scalaVersion: String) = Seq(
@@ -108,7 +76,7 @@ lazy val commonSettings = Seq(
   Test / parallelExecution := false
 )
 
-lazy val allSettings = commonSettings ++ buildSettings ++ publishSettings
+lazy val allSettings = commonSettings ++ buildSettings
 
 lazy val neo4s = project
   .in(file("."))
