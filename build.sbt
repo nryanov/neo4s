@@ -7,7 +7,7 @@ lazy val kindProjectorVersion = "0.13.0"
 lazy val slf4jVersion = "1.7.30"
 lazy val logbackVersion = "1.2.3"
 lazy val scalaTestVersion = "3.2.9"
-lazy val testContainersVersion = "0.39.4"
+lazy val testContainersVersion = "0.39.5"
 
 val scala2_12 = "2.12.13"
 val scala2_13 = "2.13.5"
