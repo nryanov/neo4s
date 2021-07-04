@@ -60,7 +60,7 @@ jobs:
         run: sbt ++${{ matrix.scala }} coverage test
 
       - name: Coverage Report
-          run: sbt coverageReport
+        run: sbt coverageReport
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v1
