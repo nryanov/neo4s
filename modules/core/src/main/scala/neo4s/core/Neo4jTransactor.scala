@@ -2,14 +2,15 @@ package neo4s.core
 
 import java.net.URI
 
-import cats.effect.{Bracket, ExitCase, Resource, Sync}
+import cats.effect.{ExitCase, Resource, Sync}
 import neo4s.core.ExecutableOp.ExecutableIO
 import org.neo4j.driver._
+import cats.effect.MonadCancel
 
 final class Neo4jTransactor[F[_]](driver: Driver)(implicit F: Sync[F]) {
 
   def transact[A](executableIO: ExecutableIO[A]): F[A] = session().use { session =>
-    Bracket[F, Throwable].bracketCase[Transaction, A](F.delay(session.beginTransaction())) { tx =>
+    MonadCancel[F, Throwable].bracketCase[Transaction, A](F.delay(session.beginTransaction())) { tx =>
       Interpreter.compile(executableIO).run(tx)
     } { case (tx, code) =>
       code match {
