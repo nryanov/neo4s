@@ -4,7 +4,6 @@ lazy val neo4jDriverVersion = "4.3.4"
 lazy val shapelessVersion = "2.3.7"
 lazy val fs2Version = "2.5.9"
 lazy val kindProjectorVersion = "0.13.0"
-lazy val slf4jVersion = "1.7.31"
 lazy val logbackVersion = "1.2.3"
 lazy val scalaTestVersion = "3.2.9"
 lazy val testContainersVersion = "0.39.5"
@@ -100,7 +99,6 @@ lazy val core = project
       "co.fs2" %% "fs2-core" % fs2Version,
       "co.fs2" %% "fs2-io" % fs2Version,
       "co.fs2" %% "fs2-reactive-streams" % fs2Version,
-      "org.slf4j" % "slf4j-api" % slf4jVersion,
       scalaOrganization.value % "scala-reflect" % scalaVersion.value % Provided,
       scalaOrganization.value % "scala-compiler" % scalaVersion.value % Provided,
       "com.dimafeng" %% "testcontainers-scala" % testContainersVersion % Test,
