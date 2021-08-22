@@ -11,21 +11,18 @@ final class PreparedQuery[A](query: Query)(implicit read: Read[A]) {
   private val START_INDEX: Int = 0
 
   def option: ExecutableIO[Option[A]] = {
-    val action: Result => Option[A] = result => {
+    val action: Result => Option[A] = result =>
       if (result.hasNext) {
         Some(read.unsafeGet(result.next(), START_INDEX))
       } else {
         None
       }
-    }
 
     ExecutableOp.delayR(query, action)
   }
 
   def list: ExecutableIO[List[A]] = {
-    val action: Result => List[A] = result => {
-      result.list().map(record => read.unsafeGet(record, START_INDEX))
-    }
+    val action: Result => List[A] = result => result.list().map(record => read.unsafeGet(record, START_INDEX))
 
     ExecutableOp.delayR(query, action)
   }

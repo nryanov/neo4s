@@ -1,8 +1,7 @@
 lazy val catsVersion = "2.6.1"
-lazy val catsEffectVersion = "2.5.3"
+lazy val catsEffectVersion = "3.2.3"
 lazy val neo4jDriverVersion = "4.3.4"
 lazy val shapelessVersion = "2.3.7"
-lazy val fs2Version = "2.5.9"
 lazy val kindProjectorVersion = "0.13.0"
 lazy val logbackVersion = "1.2.5"
 lazy val scalaTestVersion = "3.2.9"
@@ -96,9 +95,6 @@ lazy val core = project
       "org.typelevel" %% "cats-effect" % catsEffectVersion,
       "org.typelevel" %% "cats-free" % catsVersion,
       "com.chuusai" %% "shapeless" % shapelessVersion,
-      "co.fs2" %% "fs2-core" % fs2Version,
-      "co.fs2" %% "fs2-io" % fs2Version,
-      "co.fs2" %% "fs2-reactive-streams" % fs2Version,
       scalaOrganization.value % "scala-reflect" % scalaVersion.value % Provided,
       scalaOrganization.value % "scala-compiler" % scalaVersion.value % Provided,
       "com.dimafeng" %% "testcontainers-scala" % testContainersVersion % Test,
