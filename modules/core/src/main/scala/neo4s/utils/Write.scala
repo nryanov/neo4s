@@ -10,14 +10,15 @@ import shapeless.{::, <:!<, Generic, HList, HNil, Lazy}
 final class Write[A](val unsafeSet: A => List[Value]) {
 
   /**
-   * To be able to convert instance of type A to neo4j value we need to provide
-   * name for each value.
-   * For example, if we have cypher query "MATCH (n) WHERE id(n) = $id RETURN n.name", then
-   * we need to pass name "id".
+   * To be able to convert instance of type A to neo4j value we need to provide name for each value. For example, if we have cypher query
+   * "MATCH (n) WHERE id(n) = $id RETURN n.name", then we need to pass name "id".
    *
-   * @param a - value instance to be converted to neo4j value
-   * @param name - list of names which should be mapped with values in query
-   * @return - single neo4j value
+   * @param a
+   *   - value instance to be converted to neo4j value
+   * @param name
+   *   - list of names which should be mapped with values in query
+   * @return
+   *   - single neo4j value
    */
   def toValue(a: A, name: List[String]): Value =
     Values.parameters(name.zip(unsafeSet(a)).flatMap(el => List(el._1, el._2)): _*)
@@ -65,7 +66,7 @@ trait WriteLowestPriority {
     T: Lazy[Write[Option[T]]],
     N: H <:!< Option[α] forSome { type α }
   ): Write[Option[H :: T]] = {
-    def split[A](v: Option[H :: T])(f: (Option[H], Option[T]) => A): A = v.fold(f(None, None))({ case h :: t => f(Some(h), Some(t)) })
+    def split[A](v: Option[H :: T])(f: (Option[H], Option[T]) => A): A = v.fold(f(None, None)) { case h :: t => f(Some(h), Some(t)) }
 
     new Write[Option[H :: T]](
       split(_) { case (h, t) =>
@@ -78,7 +79,7 @@ trait WriteLowestPriority {
     H: Lazy[Write[Option[H]]],
     T: Lazy[Write[Option[T]]]
   ): Write[Option[Option[H] :: T]] = {
-    def split[A](v: Option[Option[H] :: T])(f: (Option[H], Option[T]) => A): A = v.fold(f(None, None))({ case h :: t => f(h, Some(t)) })
+    def split[A](v: Option[Option[H] :: T])(f: (Option[H], Option[T]) => A): A = v.fold(f(None, None)) { case h :: t => f(h, Some(t)) }
 
     new Write[Option[Option[H] :: T]](
       split(_) { case (h, t) =>

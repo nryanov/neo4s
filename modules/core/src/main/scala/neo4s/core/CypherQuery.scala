@@ -10,12 +10,10 @@ final case class CypherQuery(
 ) {
   private[core] implicit lazy val namedElementWrite: Write[elements.type] = {
     val toValues: elements.type => List[Value] = elements =>
-      elements.map(value =>
-        value match {
-          case Element.Arg(a, put) => put.unsafeToValueNonNullable(a)
-          case Element.Opt(a, put) => put.unsafeToValueNullable(a)
-        }
-      )
+      elements.map {
+        case Element.Arg(a, put) => put.unsafeToValueNonNullable(a)
+        case Element.Opt(a, put) => put.unsafeToValueNullable(a)
+      }
 
     val unsafeSet: elements.type => List[Value] = elements => toValues(elements)
 

@@ -2,20 +2,22 @@ package neo4s.core
 
 import java.net.URI
 
-import cats.effect.{Bracket, ExitCase, Resource, Sync}
+import cats.effect.kernel.Outcome
+import cats.effect.kernel.Resource.ExitCase
+import cats.effect.{MonadCancel, Resource, Sync}
 import neo4s.core.ExecutableOp.ExecutableIO
 import org.neo4j.driver._
 
 final class Neo4jTransactor[F[_]](driver: Driver)(implicit F: Sync[F]) {
 
   def transact[A](executableIO: ExecutableIO[A]): F[A] = session().use { session =>
-    Bracket[F, Throwable].bracketCase[Transaction, A](F.delay(session.beginTransaction())) { tx =>
+    MonadCancel[F, Throwable].bracketCase[Transaction, A](F.delay(session.beginTransaction())) { tx =>
       Interpreter.compile(executableIO).run(tx)
     } { case (tx, code) =>
       code match {
-        case ExitCase.Completed => F.whenA(tx.isOpen)(F.delay(tx.commit()))
-        case ExitCase.Error(_)  => F.whenA(tx.isOpen)(F.delay(tx.rollback()))
-        case ExitCase.Canceled  => F.whenA(tx.isOpen)(F.delay(tx.rollback()))
+        case Outcome.Succeeded(fa) => F.whenA(tx.isOpen)(F.delay(tx.commit()))
+        case Outcome.Errored(e)    => F.flatMap(F.whenA(tx.isOpen)(F.delay(tx.rollback())))(_ => F.raiseError(e))
+        case Outcome.Canceled()    => F.whenA(tx.isOpen)(F.delay(tx.rollback()))
       }
     }
   }
