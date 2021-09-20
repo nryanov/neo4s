@@ -5,7 +5,7 @@ lazy val shapelessVersion = "2.3.7"
 lazy val kindProjectorVersion = "0.13.2"
 lazy val logbackVersion = "1.2.5"
 lazy val scalaTestVersion = "3.2.9"
-lazy val testContainersVersion = "0.39.7"
+lazy val testContainersVersion = "0.39.8"
 
 val scala2_12 = "2.12.13"
 val scala2_13 = "2.13.5"
