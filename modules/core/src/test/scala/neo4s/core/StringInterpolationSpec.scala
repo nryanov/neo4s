@@ -11,9 +11,7 @@ class StringInterpolationSpec extends BaseSpec {
       val query = cypher"create (n:Person {name: $name})"
 
       assertResult(("create (n:Person {name: $arg0})", List("arg0"), List(Element.Arg(name, Put[String]))))(
-        query.queryText,
-        query.names,
-        query.args
+        (query.queryText, query.names, query.args)
       )
     }
 
@@ -34,9 +32,7 @@ class StringInterpolationSpec extends BaseSpec {
           List(Element.Arg(name, Put[String]), Element.Arg(limit, Put[Int]))
         )
       )(
-        query.queryText,
-        query.names,
-        query.args
+        (query.queryText, query.names, query.args)
       )
     }
   }
