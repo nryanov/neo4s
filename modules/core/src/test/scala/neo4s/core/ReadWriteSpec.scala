@@ -18,7 +18,7 @@ class ReadWriteSpec extends BaseSpec {
       val a = A(1, "2", Some(3), List(LocalDate.of(2000, 1, 1)))
       val query = cypher"create (a:A {f1: ${a.f1}, f2: ${a.f2}, f3: ${a.f3}, f4: ${a.f4})"
 
-      val value: Value = query.namedElementWrite.toValue(query.elements, List("arg0", "arg1", "arg2", "arg3"))
+      val value: Value = query.namedArgsWrite.toValue(query.args, List("arg0", "arg1", "arg2", "arg3"))
       val read = Read[A]
 
       // it may be not consistent all the time (?).
