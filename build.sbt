@@ -4,7 +4,7 @@ lazy val neo4jDriverVersion = "4.3.7"
 lazy val shapelessVersion = "2.3.7"
 lazy val kindProjectorVersion = "0.13.2"
 lazy val logbackVersion = "1.2.11"
-lazy val scalaTestVersion = "3.2.10"
+lazy val scalaTestVersion = "3.2.12"
 lazy val testContainersVersion = "0.39.12"
 
 val scala2_12 = "2.12.15"
